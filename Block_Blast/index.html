@@ -50,8 +50,6 @@
 	canvas:focus, canvas:active {
 		outline: none;
 		border: 0;
-		ie-dummy: expression(this.hideFocus=true);
-		-moz-outline-style: none;
 	}
 
 	body, div {
@@ -259,76 +257,10 @@
 	body {
 		background-color: #52AAEC;
 	}
-
-	.canvas-app-canvas {
-
-	}
-
 	.canvas-app-container {
 		background: #52AAEC;
 	}
-	 #leaderboard-btn {
-        position: fixed;
-        top: 60px;
-        right: 20px;
-        z-index: 100;
-        padding: 10px 15px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-      }
-      #leaderboard-btn:hover {
-        background-color: #45a049;
-      }
-      #leaderboard-popup {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        z-index: 1000;
-      }
-      #leaderboard-popup h2 {
-        margin-top: 0;
-        text-align: center;
-      }
-      #leaderboard-content {
-        max-height: 400px;
-        overflow-y: auto;
-      }
-      #close-leaderboard {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: none;
-        border: none;
-        font-size: 20px;
-        cursor: pointer;
-      }
-      .leaderboard-entry {
-        display: flex;
-        justify-content: space-between;
-        padding: 5px 0;
-        border-bottom: 1px solid #eee;
-      }
-      #leaderboard-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.5);
-        z-index: 999;
-      }
+	
 	</style>
   <script src="./patch/poki/sdk-v2.js?//game-cdn.poki.com/scripts/v2/poki-sdk.js"></script>
   <script type="text/javascript" src="GameAnalytics.js"></script>
@@ -412,16 +344,7 @@
 			runningFromFileWarning.parentNode.removeChild(runningFromFileWarning);
 		}
 	</script>
-		    <button id="leaderboard-btn">Leaderboard</button>
-    
-    <div id="leaderboard-overlay"></div>
-    <div id="leaderboard-popup">
-      <button id="close-leaderboard">&times;</button>
-      <h2>Leaderboard</h2>
-      <div id="leaderboard-content">
-        Loading scores...
-      </div>
-    </div>
+		
   <script id="poki-sdk-setup" type="text/javascript">
 		var data = {};
 		var isLoadFinished = false;
@@ -442,64 +365,5 @@
 			});
 		};
 	</script>
-	<script>
-      // Leaderboard functionality
-      const leaderboardBtn = document.getElementById('leaderboard-btn');
-      const leaderboardPopup = document.getElementById('leaderboard-popup');
-      const leaderboardOverlay = document.getElementById('leaderboard-overlay');
-      const closeLeaderboard = document.getElementById('close-leaderboard');
-      const leaderboardContent = document.getElementById('leaderboard-content');
-      
-      // Show leaderboard
-      leaderboardBtn.addEventListener('click', function() {
-        leaderboardOverlay.style.display = 'block';
-        leaderboardPopup.style.display = 'block';
-        fetchLeaderboard();
-      });
-      
-      // Hide leaderboard
-      closeLeaderboard.addEventListener('click', hideLeaderboard);
-      leaderboardOverlay.addEventListener('click', hideLeaderboard);
-      
-      function hideLeaderboard() {
-        leaderboardOverlay.style.display = 'none';
-        leaderboardPopup.style.display = 'none';
-      }
-      
-      // Fetch scores from server
-      function fetchLeaderboard() {
-        leaderboardContent.innerHTML = 'Loading scores...';
-        
-        fetch('scoreboard.php?'+ Date.now())
-          .then(response => response.json())
-          .then(data => {
-            if (data && data.length) {
-              let html = '';
-              data.forEach((entry, index) => {
-                html += `
-                  <div class="leaderboard-entry">
-                    <span>${index + 1}. ${entry.name || 'Anonymous'}</span>
-                    <span>${entry.score || 0}</span>
-                  </div>
-                `;
-              });
-              leaderboardContent.innerHTML = html;
-            } else {
-              leaderboardContent.innerHTML = 'No scores yet!';
-            }
-          })
-          .catch(error => {
-            console.error('Error loading leaderboard:', error);
-            leaderboardContent.innerHTML = 'Error loading leaderboard';
-          });
-      }
-      
-      // Close with ESC key
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && leaderboardPopup.style.display === 'block') {
-          hideLeaderboard();
-        }
-      });
-    </script>
  </body>
 </html>
